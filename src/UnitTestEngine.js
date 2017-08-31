@@ -204,18 +204,19 @@ Ext.define('UnitTestEngine', {
             obj = this.isValidExtObject(config.name);
             store = obj.obj;
             isValidExt = obj.valid;            
-
+            var checkName = 'EntityManagement.store.VendorContact';
             describe(config.name, function() {
                 describe('Ext object', function() {
                     it('should be a valid Ext object', function() {
                         isValidExt.should.be.true;
                     });
 
-                    if(!_.isUndefined(config.alias) && !_.isNull(config.alias)) {
+                    if(!_.isUndefined(config.alias) && !_.isNull(config.alias) && !config.alias) {
                         it('should have an alias of "'.concat(config.alias).concat('"'), function() {
                             store.alias[0].should.be.equal(config.alias);
                         });
                     }
+                    
 
                     describe("config", function() {
                         if(config.config.model) {
@@ -235,9 +236,16 @@ Ext.define('UnitTestEngine', {
                             });
                         }
                         
-                        it('should have a storeId of "'.concat(config.config.storeId), function() {
-                            store.getStoreId().should.be.equal(config.config.storeId);    
+                        it('should have a storeId ', function() {
+                            store.getStoreId().should.exist;
                         });
+
+                        if(!_.isUndefined(config.config.storeId) && !_.isNull(config.config.storeId)){
+                            it('should have a storeId of "'.concat(config.config.storeId), function() {
+                                store.getStoreId().should.be.equal(config.config.storeId);    
+                            });
+                        }
+                        
 
                         if(config.config.proxy) {
                             describe('proxy', function() {
